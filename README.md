@@ -96,6 +96,7 @@ void printName(String firstName, String lastName, {String suffix = ''}) {
 ```
 
 ## Exceptions
+on 키워드를 사용해 특정 예외 타입을 필터링하여 처리할 수 있다. 
 ```dart
 try {
   breedMoreLlamas();
@@ -110,5 +111,13 @@ try {
   print('Something really unknown: $e');
 }
 ```
-on 키워드를 사용해 특정 예외 타입을 필터링하여 처리할 수 있다. 
 
+한 부분에서 발생한 예외를 자신을 호출한 함수에서 알아챌 수 있도록 전파하기 위해서는 rethrow를 사용한다
+```dart
+try {
+  breedMoreLlamas();
+} catch (e) {
+  print('I was just trying to breed llamas!');
+  rethrow;
+}
+``` 

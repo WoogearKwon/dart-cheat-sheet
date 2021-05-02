@@ -141,3 +141,33 @@ named constructor를 사용하려면 아래와 같이 전체 이름을 호출한
 final myPoint = Point.origin();
 ```
 
+## Redirecting Constructors
+종종 어떤 생성자는 같은 클래스 내의 다른 생성자로 리다이렉팅을 해주는 목적만을 위해 존재하기도 한다. 리다이렉팅 생성자의 바디는 비어있으며 콜론(:) 다음에 생성자 호출 코드를 가진다. 
+```dart
+class Automobile {
+  String make;
+  int mpg;
+
+  // 이 클래스의 메인 생성자
+  Automobile(this.make, this.model, this.mpg);
+
+  // 메인 생성자로 작업을 넘긴다.
+  Automobile.hybrid(String make, String model) : this(make, model, 60);
+
+  // named 생성자로 작업을 넘긴다.
+  Automobile.fancyHybrid() : this.hybrid('Futurecar', 'Mark 2');
+}
+``` 
+
+## Const Constructors
+만일 어떤 클래스가 절대 변하지 않는 객체를 생성한다면, 그 객체들을 컴파일 타임 상수로 만들수 있다. 그러려면 const 생성자를 정의하고 모든 인스턴스 변수를 final로 선언하면 된다. 
+```dart
+class ImmutablePoint {
+  const ImmutablePoint(this.x, this.y);
+
+  final int x;
+  final int y;
+
+  static const ImmutablePoint origin = ImmutablePoint(0, 0);
+}
+```

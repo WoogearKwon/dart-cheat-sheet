@@ -146,6 +146,7 @@ final myPoint = Point.origin();
 ```dart
 class Automobile {
   String make;
+  String model;
   int mpg;
 
   // 이 클래스의 메인 생성자

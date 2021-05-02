@@ -121,3 +121,23 @@ try {
   rethrow;
 }
 ``` 
+
+## Named Constructors
+Dart는 named constructor를 지원함으로써 여러 개의 생성자를 가질 수 있다. 
+```dart
+class Point {
+  double x, y;
+
+  Point(this.x, this.y);
+
+  Point.origin()
+      : x = 0,
+        y = 0;
+}
+```
+
+named constructor를 사용하려면 아래와 같이 전체 이름을 호출한다.
+```dart
+final myPoint = Point.origin();
+```
+

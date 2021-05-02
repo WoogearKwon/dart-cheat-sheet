@@ -1,7 +1,9 @@
 # Dart 언어 스터디 저장소
-- 참고 링크: [Dart cheatsheet codelab](https://dart.dev/codelabs/dart-cheatsheet)
 - 모든 것을 적는 대신 몰랐던 것, 애매하게 알고 있었던 것을 위주로 나중에 사용할 목적으로 기록한다.
 
+
+# Language Cheat Sheet
+참고 링크: [Dart cheatsheet codelab](https://dart.dev/codelabs/dart-cheatsheet)
 
 ## Null-aware operators
 Dart에는 Nullable한 값을 다룰 때 사용할 수 있는 연산자들있다. 
@@ -172,3 +174,84 @@ class ImmutablePoint {
   static const ImmutablePoint origin = ImmutablePoint(0, 0);
 }
 ```
+
+# Iterable Collections
+참고 링크: [Iterable Collections](https://dart.dev/codelabs/iterables)
+
+## 예제: firstWhere() 사용하기
+특정 조건을 만족하는 첫 번째 요소 아이템을 찾을 때 사용한다.
+```dart
+String element = iterable.firstWhere((element) => element.length > 5);
+```
+
+리스트 안의 문자열 중 5글자를 초과하는 첫 번째 문자열을 리턴하는 예제코드이다.
+```dart
+bool predicate(String element) {
+  return element.length > 5;
+}
+
+main() {
+  var items = ['Salad', 'Popcorn', 'Toast', 'Lasagne'];
+
+  // 간단한 표현식으로 찾음
+  var element1 = items.firstWhere((element) => element.length > 5);
+  print(element1);
+
+  // 함수 블록을 사용함
+  var element2 = items.firstWhere((element) {
+    return element.length > 5;
+  });
+  print(element2);
+
+  // 함수의 레퍼런스로 전달
+  var element3 = items.firstWhere(predicate);
+  print(element3);
+
+  // 아무것도 찾지 못했을 경우 `orElse` 함수를 사용할 수도 있다. 
+  var element4 = items.firstWhere(
+    (element) => element.length > 10,
+    orElse: () => 'None!',
+  );
+  print(element4);
+}
+```
+아래는 조건식을 작성하는 세 가지 방법이다.
+- 표현식(Expression): 화살표(=>)를 사용한 표현식으로 조건을 정의할 수 있다.
+- 코드 블록(Block): 중괄호를 사용해 여러 줄의 코드를 작성하고 return 문을 사용할 수 있다.
+- 함수(Function): 외부 함수를 생성해 firstWhere()의 파라미터로 넘길 수 있다.
+
+위 세 가지 방법 중 무엇이 항상 더 좋거나 옳은 것이 아니라 자신의 상황에 맞게 적절한 방식을 사용하면 된다.
+
+## 조건 확인하기 (Checking Conditions)
+Iterable 안의 모든 요소가 특정 조건을 만족하는지 확인하기 위해서는 어떤 방법을 사용해야 할까?
+
+일반적으로 for-in 루프를 사용한 아래와 같은 방식은 좋은 방식이 아니다. 
+```dart
+for (var item in items) {
+  if (item.length < 5) {
+    return false;
+  }
+}
+return true;
+```
+
+대신 every() 메서드를 사용하여 더 쉽게 구현할 수 있다.
+```dart
+return items.every((element) => element.length >= 5);
+```
+
+## 예제: any()와 every() 사용하기 
+```dart
+void main() {
+  var items = ['Salad', 'Popcorn', 'Toast'];
+  
+  if (items.any((element) => element.contains('a'))) {
+    print('At least one element contains "a"');
+  }
+  
+  if (items.every((element) => element.length >= 5)) {
+    print('All elements have length >= 5');
+  }
+}
+```
+

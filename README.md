@@ -246,12 +246,58 @@ void main() {
   var items = ['Salad', 'Popcorn', 'Toast'];
   
   if (items.any((element) => element.contains('a'))) {
-    print('At least one element contains "a"');
+    print('최소 하나의 항목이 "a"를 포함하고 있음');
   }
   
   if (items.every((element) => element.length >= 5)) {
-    print('All elements have length >= 5');
+    print('모든 요소들이 >= 5의 길이를 가진다');
   }
+}
+```
+
+## Filtering
+where() 메서드를 사용하면 Iterable 내의 특정 조건을 만족하는 모든 요소들을 찾을 수 있다.
+아래는 where() 메서드를 통해 필터링한 evenNumbrs를 for-in 루프 안에서 출력하는 예제이다. 
+
+```dart
+var evenNumbers = numbers.where((number) => number.isEven);
+for (var number in evenNumbers) {
+  print('$number is even');
+}
+``` 
+
+아래는 any()를 where()와 함께 사용한 예제이다.
+```dart
+main() {
+  var evenNumbers = [1, -2, 3, 42].where((number) => number.isEven);
+
+  for (var number in evenNumbers) {
+    print('$number is even.');
+  }
+
+  if (evenNumbers.any((number) => number.isNegative)) {
+    print('evenNumbers 는 음수를 포함한다.');
+  }
+
+  // If no element satisfies the predicate, the output is empty.
+  var largeNumbers = evenNumbers.where((number) => number > 1000);
+  if (largeNumbers.isEmpty) {
+    print('largeNumbers 는 비어있다.');
+  }
+}
+```
+
+## 예제: takeWhile 사용하기
+takeWhile()과 skipWhile() 또한 Iterable을 필터링하는데 사용하기 좋은 메서드이다.
+```dart
+main() {
+  var numbers = [1, 3, -2, 0, 4, 5];
+
+  var numbersUntilZero = numbers.takeWhile((number) => number != 0);
+  print('Numbers until 0: $numbersUntilZero');ㅑ
+
+  var numbersAfterZero = numbers.skipWhile((number) => number != 0);
+  print('Numbers after 0: $numbersAfterZero');
 }
 ```
 

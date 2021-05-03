@@ -301,3 +301,24 @@ main() {
 }
 ```
 
+## Mapping
+map() 메서드를 사용해 Iterable의 모든 요소를 바꿀 수 있다. 아래는 numbers의 모든 요소에 10을 곱한 Iterable을 리턴하는 예제이다.
+```dart
+// output은 numbers의 모든 요소에 10을 곱한 Iterable이다.
+Iterable<int> output = numbers.map((number) => number * 10);
+```
+
+또한 map()을 사용해 Iterable의 요소를 다른 객체로 변환할 수 있다. 아래는 모든 int를 String으로 변환하는 예제이다. 
+```dart
+Iterable<String> output = numbers.map((number) => number.toString());
+```
+
+```dart
+main() {
+  var numbersByTwo = [1, -2, 3, 42].map((number) => number * 2);
+  print('Numbers: $numbersByTwo.');
+  // 출력 결과 
+  // Numbers: (2, -4, 6, 84).
+}
+```
+

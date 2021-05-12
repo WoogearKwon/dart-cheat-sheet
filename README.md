@@ -3,7 +3,7 @@
 
 
 # Language Cheat Sheet
-참고 링크: [Dart cheatsheet codelab](https://dart.dev/codelabs/dart-cheatsheet)
+[참고 링크](https://dart.dev/codelabs/dart-cheatsheet)
 
 ## Null-aware operators
 Dart에는 Nullable한 값을 다룰 때 사용할 수 있는 연산자들있다. 
@@ -176,7 +176,7 @@ class ImmutablePoint {
 ```
 
 # Iterable Collections
-참고 링크: [Iterable Collections](https://dart.dev/codelabs/iterables)
+[참고 링크](https://dart.dev/codelabs/iterables)
 
 ## 예제: firstWhere() 사용하기
 특정 조건을 만족하는 첫 번째 요소 아이템을 찾을 때 사용한다.
@@ -322,3 +322,20 @@ main() {
 }
 ```
 
+# 비동기 프로그래밍: futures, async, await
+[참고링크](https://dart.dev/codelabs/async-await)
+
+## future
+Future의 인스턴스로서, 비동기 작업의 결과를 나타낸다. future는 uncompleted 또는 comple3ted 두 가지 상태를 가진다. 
+
+### Uncompleted
+사용자가 비동기 함수를 호출하면, 그 함수는 uncompleted future를 반환한다. future는 그 함수의 비동기 작업이 끝나기를 기다리거나 에러를 던진다.
+
+### Completed
+비동기 작업이 성공하면 future는 값과 함께 작업을 완료한다. 아니면 에러와 함께 작업을 완료한다.
+
+### 값과 함께 완료하기
+Future<T> 타입의 future는 T 타입의 값과 함께 작업을 완료한다. 예를들어, Future<String> 타입의 future는 String 값을 만들어낸다. 만약 future가 사용가능한 값을 생성하지 않는다면 그 futue의 타입은 Future<void>이다. 
+
+### 에러와 함께 완료하기
+어떤 이유에서건 future에 의해 실행된 비동기 작업이 싪패하면, future는 에러와 함께 완료된다. 

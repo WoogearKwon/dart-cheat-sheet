@@ -334,8 +334,60 @@ Future의 인스턴스로서, 비동기 작업의 결과를 나타낸다. future
 ### Completed
 비동기 작업이 성공하면 future는 값과 함께 작업을 완료한다. 아니면 에러와 함께 작업을 완료한다.
 
-### 값과 함께 완료하기
+### 리턴값과 함께 작업 완료하기
 Future<T> 타입의 future는 T 타입의 값과 함께 작업을 완료한다. 예를들어, Future<String> 타입의 future는 String 값을 만들어낸다. 만약 future가 사용가능한 값을 생성하지 않는다면 그 futue의 타입은 Future<void>이다. 
 
-### 에러와 함께 완료하기
+### 에러와 함께 작업 완료하기
 어떤 이유에서건 future에 의해 실행된 비동기 작업이 싪패하면, future는 에러와 함께 완료된다. 
+
+## future 사용하기: async와 await
+async와 await 키워드를 단순히 선언하는 방식을 통해 비동기 함수와 그 결과를 정의할 수 있다. 아래의 두 가지 기본 가이드라인을 기억하자.
+- async 함수를 정의하려면 함수의 바디 앞에 async를 붙인다.
+- await 키워드는 async 함수 안에서만 사용이 가능하다. 
+
+예제코드: 동기 함수(아래)
+```dart
+String createOrderMessage() {
+  var order = fetchUserOrder();
+  return 'Your order is: $order';
+}
+
+Future<String> fetchUserOrder() =>
+    // Imagine that this function is
+    // more complex and slow.
+    Future.delayed(
+      Duration(seconds: 2),
+      () => 'Large Latte',
+    );
+
+void main() {
+  print('Fetching user order...');
+  print(createOrderMessage());
+}
+```
+
+예제코드: 비동기 함수(아래)
+```dart
+Future<String> createOrderMessage() async {
+  var order = await fetchUserOrder();
+  return 'Your order is: $order';
+}
+
+Future<String> fetchUserOrder() =>
+    // Imagine that this function is
+    // more complex and slow.
+    Future.delayed(
+      Duration(seconds: 2),
+      () => 'Large Latte',
+    );
+
+Future<void> main() async {
+  print('Fetching user order...');
+  print(await createOrderMessage());
+}
+```
+
+위의 두 가지를 제외하면 동기적 코드와 매우 유사하다. 비동기 함수는 세 가지 측면에서 차이가 있다.
+- createOrderMessage()의 리턴타입이 String에서 Future<String>로 바뀌었다.
+- async 키워드가 createOrderMessage()와 main() 함수의 바디 앞에 추가되었다.
+- await 키워드가 비동기 함수 fetchUserOrder()와 createOrderMessage()를 호출하는 코드 앞에 추가되었다.

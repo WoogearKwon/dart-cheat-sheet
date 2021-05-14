@@ -335,10 +335,10 @@ Future의 인스턴스로서, 비동기 작업의 결과를 나타낸다. future
 비동기 작업이 성공하면 future는 값과 함께 작업을 완료한다. 아니면 에러와 함께 작업을 완료한다.
 
 ### 리턴값과 함께 작업 완료하기
-Future<T> 타입의 future는 T 타입의 값과 함께 작업을 완료한다. 예를들어, Future<String> 타입의 future는 String 값을 만들어낸다. 만약 future가 사용가능한 값을 생성하지 않는다면 그 futue의 타입은 Future<void>이다. 
+```Future<T>``` 타입의 future는 T 타입의 리턴값을 가지고 작업을 완료한다. 예를들어, Future<String> 타입의 future는 String 값을 생성해낸다. 만약 future가 사용가능한 값을 생성하지 않는다면 그 futue의 타입은 Future<void>이다. 
 
 ### 에러와 함께 작업 완료하기
-어떤 이유에서건 future에 의해 실행된 비동기 작업이 싪패하면, future는 에러와 함께 완료된다. 
+어떤 이유에서건 future에 의해 실행된 비동기 작업이 실패하면, future는 에러와 함께 완료된다. 
 
 ## future 사용하기: async와 await
 async와 await 키워드를 단순히 선언하는 방식을 통해 비동기 함수와 그 결과를 정의할 수 있다. 아래의 두 가지 기본 가이드라인을 기억하자.
@@ -353,8 +353,7 @@ String createOrderMessage() {
 }
 
 Future<String> fetchUserOrder() =>
-    // Imagine that this function is
-    // more complex and slow.
+    // 이 함수가 더 복잡하고 느리다고 상상해보라.
     Future.delayed(
       Duration(seconds: 2),
       () => 'Large Latte',
@@ -374,8 +373,7 @@ Future<String> createOrderMessage() async {
 }
 
 Future<String> fetchUserOrder() =>
-    // Imagine that this function is
-    // more complex and slow.
+    // 이 함수가 더 복잡하고 느리다고 상상해보라.
     Future.delayed(
       Duration(seconds: 2),
       () => 'Large Latte',

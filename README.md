@@ -3,7 +3,7 @@
 
 
 # Language Cheat Sheet
-[참고 링크](https://dart.dev/codelabs/dart-cheatsheet)
+[출처 링크](https://dart.dev/codelabs/dart-cheatsheet)
 
 ## Null-aware operators
 Dart에는 Nullable한 값을 다룰 때 사용할 수 있는 연산자들있다. 
@@ -176,7 +176,7 @@ class ImmutablePoint {
 ```
 
 # Iterable Collections
-[참고 링크](https://dart.dev/codelabs/iterables)
+[출처 링크](https://dart.dev/codelabs/iterables)
 
 ## 예제: firstWhere() 사용하기
 특정 조건을 만족하는 첫 번째 요소 아이템을 찾을 때 사용한다.
@@ -294,7 +294,7 @@ main() {
   var numbers = [1, 3, -2, 0, 4, 5];
 
   var numbersUntilZero = numbers.takeWhile((number) => number != 0);
-  print('Numbers until 0: $numbersUntilZero');ㅑ
+  print('Numbers until 0: $numbersUntilZero');
 
   var numbersAfterZero = numbers.skipWhile((number) => number != 0);
   print('Numbers after 0: $numbersAfterZero');
@@ -323,7 +323,7 @@ main() {
 ```
 
 # 비동기 프로그래밍: futures, async, await
-[참고링크](https://dart.dev/codelabs/async-await)
+[출처 링크](https://dart.dev/codelabs/async-await)
 
 ## future
 Future의 인스턴스로서, 비동기 작업의 결과를 나타낸다. future는 uncompleted 또는 comple3ted 두 가지 상태를 가진다. 
@@ -353,7 +353,7 @@ String createOrderMessage() {
 }
 
 Future<String> fetchUserOrder() =>
-    // 이 함수가 더 복잡하고 느리다고 상상해보라.
+    // 이 함수가 더 복잡하고 느리다고 상상할 것
     Future.delayed(
       Duration(seconds: 2),
       () => 'Large Latte',
@@ -373,7 +373,7 @@ Future<String> createOrderMessage() async {
 }
 
 Future<String> fetchUserOrder() =>
-    // 이 함수가 더 복잡하고 느리다고 상상해보라.
+    // 이 함수가 더 복잡하고 느리다고 상상할 것
     Future.delayed(
       Duration(seconds: 2),
       () => 'Large Latte',
@@ -389,3 +389,50 @@ Future<void> main() async {
 - createOrderMessage()의 리턴타입이 String에서 Future<String>로 바뀌었다.
 - async 키워드가 createOrderMessage()와 main() 함수의 바디 앞에 추가되었다.
 - await 키워드가 비동기 함수 fetchUserOrder()와 createOrderMessage()를 호출하는 코드 앞에 추가되었다.
+
+# 비동기 프로그래밍: Streams
+[출처 링크](https://dart.dev/tutorials/language/streams)
+
+Future는 즉시 완료되지 않는 처리를 대표한다. 읾반적인 함수는 결과값을 반환하는 반면, 비동기 함수는 Future를 반환하는데, 이 또한 결국 결과값을 가진다. Future는 결과값이 언제 준비되었는지 알려준다.
+
+Stream은 연속적 비동기 이벤트로서, 비동기 iterable과 비슷하다. 사용자가 요청할 때 다음 이벤트를 수행하는 대신 stream은 준비가 되면 사용자에게 다음 이벤트가 있다고 알려준다. 
+
+## Stream 이벤트 수신하기
+Stream은 여러 방법으로 생성될 수 있지만, 사용방법은 모두 같다. 비동기 루프(보통 그냥 await for라고 부른다.)가 Stream 이벤트를 도는데 마치 iterable을 도는 for 루프와 같다. (아래 예시) 
+```dart
+Future<int> sumStream(Stream<int> stream) async {
+  var sum = 0;
+  await for (var value in stream) {
+    sum += value;
+  }
+  return sum;
+}
+```
+위 코드는 그저 정수 이벤트의 스트림 이벤트를 각각 받아서 더하고, 그 합계를 반환한다. 루프가 종료되면 함수는 다음 이벤트가 도착하거나 스트림이 끝날 때까지 멈춘다.
+
+함수가 async 키워드로 마크되어있는데, 이는 await for 루프를 사용하기 위해 필요하다. 
+
+아래는 앞의 코드를 테스트하기 위해 async* 함수를 사용해 간단한 정수 stream을 생성하는 코드이다.
+```dart
+import 'dart:async';
+
+Future<int> sumStream(Stream<int> stream) async {
+  var sum = 0;
+  await for (var value in stream) {
+    sum += value;
+  }
+  return sum;
+}
+
+Stream<int> countStream(int to) async* {
+  for (int i = 1; i <= to; i++) {
+    yield i;
+  }
+}
+
+main() async {
+  var stream = countStream(10);
+  var sum = await sumStream(stream);
+  print(sum); // 55
+}
+```

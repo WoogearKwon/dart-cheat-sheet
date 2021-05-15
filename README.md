@@ -436,3 +436,76 @@ main() async {
   print(sum); // 55
 }
 ```
+
+Stream 사용하기
+Stream Class는 iterable과 비슷하게 여러 helper 메서드를 포함하고 있다. 예를 들면 lastWhere()를 사용해 스트림에서 가장 마지막에 있는 양의 정수를 찾을 수 있다. 
+```dart
+Future<int> lastPositive(Stream<int> stream) =>
+    stream.lastWhere((x) => x >= 0);
+```
+
+## Stream을 가공하는 메서드 목록
+```dart
+Future<T> get first;
+Future<bool> get isEmpty;
+Future<T> get last;
+Future<int> get length;
+Future<T> get single;
+Future<bool> any(bool Function(T element) test);
+Future<bool> contains(Object needle);
+Future<E> drain<E>([E futureValue]);
+Future<T> elementAt(int index);
+Future<bool> every(bool Function(T element) test);
+Future<T> firstWhere(bool Function(T element) test, {T Function() orElse});
+Future<S> fold<S>(S initialValue, S Function(S previous, T element) combine);
+Future forEach(void Function(T element) action);
+Future<String> join([String separator = ""]);
+Future<T> lastWhere(bool Function(T element) test, {T Function() orElse});
+Future pipe(StreamConsumer<T> streamConsumer);
+Future<T> reduce(T Function(T previous, T element) combine);
+Future<T> singleWhere(bool Function(T element) test, {T Function() orElse});
+Future<List<T>> toList();
+Future<Set<T>> toSet();
+```
+drain()과 pipe()을 제외한 위의 모든 함수들은 Iterable의 함수들과 유사하다. 각각의 메서드는 async 함수에 await for를 작성해서 쉽게 사용할 수 있다. 
+
+## stream을 수정해주는 메서드 목록
+아래의 메서드들은 원래의 stream을 기반으로한 새로운 stream을 반환한다. 아래의 메서드들은 Iterable에도 비슷하게 존재하는 메서드들이다.  
+```dart
+Stream<R> cast<R>();
+Stream<S> expand<S>(Iterable<S> Function(T element) convert);
+Stream<S> map<S>(S Function(T event) convert);
+Stream<T> skip(int count);
+Stream<T> skipWhile(bool Function(T element) test);
+Stream<T> take(int count);
+Stream<T> takeWhile(bool Function(T element) test);
+Stream<T> where(bool Function(T event) test);
+```
+
+아래의 asyncExpand()와 asyncMap() 함수들은 expand()와 map()과 유사하지만 파라미터로 비동기 함수를 받을 수 있다.
+```dart
+Stream<E> asyncExpand<E>(Stream<E> Function(T event) convert);
+Stream<E> asyncMap<E>(FutureOr<E> Function(T event) convert);
+Stream<T> distinct([bool Function(T previous, T next) equals]);
+```
+
+아래의 마지막 함수 세 개는 더욱 특별하다. await for 루프는 할 수 없는 에러 취급 코드를 포함하고 있다. 첫 에러가 루프에 도달하면 루프와 스트림의 구독이 종료된다. 
+```dart
+Stream<T> handleError(Function onError, {bool test(error)});
+Stream<T> timeout(Duration timeLimit,
+    {void Function(EventSink<T> sink) onTimeout});
+Stream<S> transform<S>(StreamTransformer<T, S> streamTransformer);
+```
+
+아래는 handlerError()를 사용하는 예제로, await for 루프에서 사용되기 전에 stream에서 에러를 제거한다.
+```dart
+Stream<S> mapLogErrors<S, T>(
+  Stream<T> stream,
+  S Function(T event) convert,
+) async* {
+  var streamWithoutErrors = stream.handleError((e) => log(e));
+  await for (var event in streamWithoutErrors) {
+    yield convert(event);
+  }
+}
+```

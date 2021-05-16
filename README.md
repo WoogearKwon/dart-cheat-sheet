@@ -509,3 +509,16 @@ Stream<S> mapLogErrors<S, T>(
   }
 }
 ```
+
+## listen() 메서드
+listen 메서드는 저수준(low-level)의 메서드로, 모든 stream 함수들은 listen()에 대해 정의되어 있다.
+
+```dart
+StreamSubscription<T> listen(void Function(T event) onData,
+    {Function onError, void Function() onDone, bool cancelOnError});
+```
+새로운 Stream 타입을 만드려면, Stream 클래스를 상속하고 listen() 메서드를 구현하면 된다. 모든 stream의 메서드는 동작을 위해 listen()을 호출하게 되어있다.
+
+listen() 메서드는 사용자로 하여금 stream을 청취하기 시작하게 한다. 그 전까지 stream은 비활성상태의 객체로 어떤 이벤트를 사용자가 보길 원하는지 설명해준다. 사용자가 청취하면 StreamSubscription 객체가 반환되는데, 이는 이벤트를 생산하는 활성화된 stream을 대표한다. 이 특징은 Iterable이 그저 객체의 집합이지만, 반복을 수행하는 주체는 iterator라는 점과 매우 흡사하다.
+
+stream 구독은 사용자가 구족을 잠시 멈추고, 다시 재개하고, 완전히 취소할 수 있게 해준다. 사용자는 콜백을 설정해서 스트림이 종료되었을 때 각각의 데이터 이벤트나 에러 이벤트가 호출될 수 있게 할 수 있다. 
